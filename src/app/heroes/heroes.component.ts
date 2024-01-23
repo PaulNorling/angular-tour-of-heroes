@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { UpperCasePipe } from '@angular/common';
 import { Hero } from '../hero'
-import { HEROES } from '../mock-heroes';
+import { HeroService } from '../hero.service';
 import { HeroDetailComponent } from '../hero-detail/hero-detail.component';
 import {
   NgIf,
@@ -24,9 +24,20 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './heroes.component.css'
 })
 export class HeroesComponent {
-  heroes = HEROES;
+  ngOnInit(): void {
+    this.getHeroes();
+  }
+  
+  heroes: Hero[] = [];
 
   selectedHero!: Hero;
+
+  constructor(private heroService: HeroService) {}
+
+  getHeroes(): void {
+    this.heroService.getHeroes()
+        .subscribe(heroes => this.heroes = heroes);
+  }
   
   onSelect(hero: Hero): void {
     this.selectedHero = hero;
